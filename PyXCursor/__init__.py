@@ -1,18 +1,3 @@
-import time
-def timer(func):
-    def wrapper_timer(*args, **kwargs):
-        #start_time = time.perf_counter()
-        start_time = time.time() 
-        value = func(*args, **kwargs)
-        #run_time = time.perf_counter() - start_time
-        run_time = time.time() - start_time
-        print(f"Finished {func.__name__!r} in {' '*(30-len(func.__name__))}{run_time:.6f} secs")
-        return value
-    return wrapper_timer
-
-
-
-
 import os
 import ctypes
 import ctypes.util
