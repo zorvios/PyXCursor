@@ -2,8 +2,8 @@
 This Test :
 ------------------------------------------------------
 'init' in                           0.011628 secs
-'GetCursorImageArray' in            0.000872 secs
-'SaveImage' in                      0.010361 secs
+'getCursorImageArray' in            0.000872 secs
+'saveImage' in                      0.010361 secs
 ------------------------------------------------------
 
 
@@ -13,12 +13,12 @@ Import Libs : 0.152991 secs
 
 Finished '__init__' in         0.012024 secs
 
-        --- 'GetCursorImageArray' ---
-Finished    'GetCursorImageData'  in            0.000074 secs
+        --- 'getCursorImageArray' ---
+Finished    'getCursorImageData'  in            0.000074 secs
 Finished    'argbdata_to_pixdata' in            0.000734 secs
         --- Finished in 0.000886 secs ---
 
-Finished 'SaveImage' in        0.011071 secs
+Finished 'saveImage' in        0.011071 secs
 ------------------------------------------------------
 """
 
@@ -43,13 +43,13 @@ def init():
 cursor = init()
 
 @timer
-def GetCursorImageArray():
-    return cursor.GetCursorImageArray()
+def getCursorImageArray():
+    return cursor.getCursorImageArray()
 
 @timer
-def SaveImage(imgarray,text):
-    cursor.SaveImage(imgarray,text)
+def saveImage(imgarray,text):
+    cursor.saveImage(imgarray,text)
 
 
-imgarray = GetCursorImageArray()
-SaveImage(imgarray,'cursor_image.png')
+imgarray = getCursorImageArray()
+saveImage(imgarray,'cursor_image.png')
