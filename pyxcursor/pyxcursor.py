@@ -96,7 +96,7 @@ class Xcursor:
 
         return b 
 
-    def GetCursorImageData(self):
+    def getCursorImageData(self):
         # Call the function. Read data of cursor/mouse-pointer.
         cursor_data = self.XFixesGetCursorImage(self.display)
 
@@ -106,8 +106,8 @@ class Xcursor:
         # Note: cursor_data is a pointer, take cursor_data[0]
         return cursor_data[0]
 
-    def GetCursorImageArray(self):
-        data = self.GetCursorImageData()
+    def getCursorImageArray(self):
+        data = self.getCursorImageData()
         # x, y = data.x, data.y
         height,width = data.height, data.width
 
@@ -119,13 +119,12 @@ class Xcursor:
 
         return imgarray
 
-    def SaveImage(self,imgarray,text):
+    def saveImage(self,imgarray,text):
         from PIL import Image
         img = Image.fromarray(imgarray)
         img.save(text)
 
 if __name__ == "__main__":
     cursor = Xcursor()
-    imgarray = cursor.GetCursorImageArray()
+    imgarray = cursor.getCursorImageArray()
     cursor.SaveImage(imgarray,'cursor_image.png')
-
