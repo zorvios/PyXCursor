@@ -1,9 +1,25 @@
-from time import time
+import time
+def timer(func):
+    def wrapper_timer(*args, **kwargs):
+        #start_time = time.perf_counter()
+        start_time = time.time() 
+        value = func(*args, **kwargs)
+        #run_time = time.perf_counter() - start_time
+        run_time = time.time() - start_time
+        print(f"Finished {func.__name__!r} in {' '*(30-len(func.__name__))}{run_time:.6f} secs")
+        return value
+    return wrapper_timer
+
+
+
 
 import os
 import ctypes
 import ctypes.util
 import numpy as np
+
+# A helper function to convert data from Xlib to byte array.
+import struct, array
 
 # Define ctypes version of XFixesCursorImage structure.
 PIXEL_DATA_PTR = ctypes.POINTER(ctypes.c_ulong)
@@ -39,8 +55,6 @@ class XFixesCursorImage (ctypes.Structure):
 class Display(ctypes.Structure):
     pass
 
-# A helper function to convert data from Xlib to byte array.
-import struct, array
 
 class Xcursor:
     display = None
@@ -97,7 +111,7 @@ class Xcursor:
 
         return b 
 
-    def GetCursorImageArray(self):
+    def GetCursorImageData(self):
         # Call the function. Read data of cursor/mouse-pointer.
         cursor_data = self.XFixesGetCursorImage(self.display)
 
@@ -105,22 +119,28 @@ class Xcursor:
             raise Exception("Cannot read XFixesGetCursorImage()")
 
         # Note: cursor_data is a pointer, take cursor_data[0]
-        cursor_data = cursor_data[0]
+        return cursor_data[0]
 
-        # Check fields
-        print("cursor x=", cursor_data.x)
-        print("cursor y=", cursor_data.y)
-        print("cursor width=", cursor_data.width)
-        print("cursor height=", cursor_data.height)
-        
-        bytearr = self.argbdata_to_pixdata(cursor_data.pixels, cursor_data.width * cursor_data.height)
-        
+    def GetCursorImageArray(self):
+        data = self.GetCursorImageData()
+        # x, y = data.x, data.y
+        height,width = data.height, data.width
+
+        bytearr = self.argbdata_to_pixdata(data.pixels, height*width)
+
         imgarray = np.array(bytearr, dtype=np.uint8)
-        imgarray = imgarray.reshape(cursor_data.height,cursor_data.width,4)
+        imgarray = imgarray.reshape(height,width,4)
         del bytearr
+
         return imgarray
 
-    def SaveImg(self,imgarray,text='testrgba.png'):
+    def SaveImage(self,imgarray,text):
         from PIL import Image
         img = Image.fromarray(imgarray)
         img.save(text)
+
+if __name__ == "__main__":
+    cursor = Xcursor()
+    imgarray = cursor.GetCursorImageArray()
+    cursor.SaveImage(imgarray,'cursor_image.png')
+
