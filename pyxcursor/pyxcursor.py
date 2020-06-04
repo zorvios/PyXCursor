@@ -127,4 +127,4 @@ class Xcursor:
 if __name__ == "__main__":
     cursor = Xcursor()
     imgarray = cursor.getCursorImageArray()
-    cursor.SaveImage(imgarray,'cursor_image.png')
+    cursor.saveImage(imgarray,'cursor_image.png')
