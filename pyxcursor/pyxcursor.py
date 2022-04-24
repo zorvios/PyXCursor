@@ -126,7 +126,8 @@ class Xcursor:
 
         bytearr = ctypes.cast(data.pixels, ctypes.POINTER(ctypes.c_ulong *height * width))[0]
         imgarray = np.array(bytearray(bytearr))
-        imgarray = imgarray.reshape(height,width,8)[:, :, (0, 1, 2, 3)]
+        imgarray = imgarray.reshape(height,width,
+                             ctypes.sizeof(ctypes.c_ulong))[:, :, (0, 1, 2, 3)]
         del bytearr
 
         return imgarray
